@@ -1,0 +1,211 @@
+LAB 02 TASKS
+
+1)
+INCLUDE Irvine32.inc
+
+.data
+_name BYTE "Iqra Ashraf",0
+_rollno BYTE "24K0952",0
+_section BYTE "BSCS-3C",0
+_course BYTE "COAL",0
+.code
+main proc
+
+mov edx,offset _name
+call WriteString
+
+mov edx, offset _rollno
+call WriteString
+
+mov edx, offset _section
+call WriteString
+
+mov edx, offset _course
+call WriteString
+
+exit
+main endp
+end main
+
+SECTION 3
+
+1)
+
+i.
+
+INCLUDE Irvine32.inc
+
+.data
+
+.code
+main proc
+
+mov eax, 47
+add eax, 39
+add eax, 60
+add eax, 85
+add eax, 64
+add eax, 44
+sub eax, 0Ah
+
+call DumpRegs
+
+exit
+main endp
+end main
+
+ii.
+
+INCLUDE Irvine32.inc
+
+.data
+
+.code
+main proc
+
+mov eax, 30
+sub eax, 9
+add eax, 186
+sub eax, 150
+
+call DumpRegs
+
+exit
+main endp
+end main
+
+iii.
+
+INCLUDE Irvine32.inc
+
+.data
+
+.code
+main proc
+
+mov eax, 101110b
+add eax, 50Ah
+add eax, 6710d
+add eax, 1010001b
+add eax, 0Fh
+
+call DumpRegs
+
+exit
+main endp
+end main
+
+iv.
+
+INCLUDE Irvine32.inc
+
+.data
+
+.code
+main proc
+
+mov eax, 10001101b
+sub eax, 0D83h
+add eax, 385
+add eax, 10
+add eax, 1111101b
+sub eax, 0Eh
+add eax, 0Fh
+
+call DumpRegs
+
+exit
+main endp
+end main
+
+2)
+
+i.
+
+INCLUDE Irvine32.inc
+
+.data
+
+.code
+main proc
+
+mov edx, eax
+add edx, 1
+add edx, ebx
+sub edx, ecx
+add edx, 0Ah
+sub edx, 53
+add edx, 73d
+
+call DumpRegs
+
+exit
+main endp
+end main
+
+ii.
+
+INCLUDE Irvine32.inc
+
+.data 
+
+.code
+main proc
+
+mov eax,10001101b
+sub eax,0D83h
+add eax,385
+add eax,10
+add eax,1111101b
+sub eax,0Eh
+add eax,0Fh
+
+call DumpRegs
+
+exit
+main endp
+end main
+
+iii.
+
+INCLUDE Irvine32.inc
+
+.data
+
+.code
+main proc
+
+mov ebx, 05ADh
+sub ebx, eax
+add ebx, 65d
+add ebx, 59
+sub ebx, 11100101
+add ebx, 07Bh
+
+call DumpRegs
+
+exit
+main endp
+end main
+
+iv.
+
+INCLUDE Irvine32.inc
+
+.data
+
+.code
+main proc
+
+mov ecx, 110010101101b
+add ecx, 45h
+sub ecx, 59
+add ecx, ebx
+sub ecx,ecx
+add ecx, 1
+
+call DumpRegs
+
+exit
+main endp
+end main
