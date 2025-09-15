@@ -1,0 +1,115 @@
+TASK 01:
+Include Irvine32.inc
+
+.data
+
+.code
+main proc
+mov eax, 15000
+add eax, 1
+call DumpRegs
+
+exit
+main endp
+end main
+
+TASK 02:
+Include Irvine32.inc
+
+.data
+
+.code
+main proc
+mov ax, 0A7FFh
+add al, 15h ; CF=1  SF=0  ZF=0  OF=0
+call DumpRegs
+add ah, 1h  ; CF=0  SF=1  ZF=0  OF=0
+call DumpRegs
+add ax, 2h  ; CF=0  SF=1  ZF=0  OF=0
+call DumpRegs
+
+exit
+main endp
+end main
+
+TASK 03:
+Include Irvine32.inc
+
+.data
+array1 WORD 45, 32, 71, 44, 92
+array2 WORD 32, 44, 45, 71, 92
+
+.code
+main proc
+mov eax,0
+mov ax, [array2]
+call WriteDec
+call Crlf
+mov ax, [array2 + 2]
+call WriteDec
+call Crlf
+mov ax, [array2 + 4]
+call WriteDec
+call Crlf
+mov ax, [array2 + 6]
+call WriteDec
+call Crlf
+mov ax, [array2 + 8]
+call WriteDec
+call Crlf
+
+
+exit
+main endp
+end main
+
+TASK 04:
+Include Irvine32.inc
+
+.data
+arrayB BYTE 25, 45, 65
+arrayW WORD 155, 185, 225
+arrayD DWORD 645, 690, 735
+SUM1 DWORD ?
+SUM2 DWORD ?
+SUM3 DWORD ?
+
+.code
+main proc
+mov esi, OFFSET arrayB     
+mov edi, OFFSET arrayw     
+mov ebx, OFFSET arrayD  
+   
+movzx eax, BYTE ptr [esi]
+movzx edx, WORD ptr [edi]
+add eax, edx
+add eax, [ebx]
+mov SUM1, eax
+
+movzx eax, BYTE ptr [esi+1]
+movzx edx, WORD ptr [edi+2]
+add eax, edx
+add eax, [ebx+4]
+mov SUM2, eax
+
+movzx eax, BYTE ptr [esi+2]
+movzx edx, WORD ptr [edi+4]
+add eax, edx
+add eax, [ebx+8]
+mov SUM3, eax
+
+mov eax, SUM1
+call WriteDec
+call Crlf
+
+mov eax, SUM2
+call WriteDec
+call Crlf
+
+mov eax, SUM3
+call WriteDec
+call Crlf
+
+exit
+main endp
+end main
