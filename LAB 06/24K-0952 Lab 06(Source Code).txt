@@ -1,0 +1,252 @@
+TASK 01:
+Include Irvine32.inc
+
+.data
+fib1 DWORD 0
+fib2 DWORD 1
+count DWORD 10
+
+.code
+main proc
+mov eax, fib1
+call WriteDec
+call Crlf
+
+mov eax, fib2
+call WriteDec
+call Crlf
+
+mov ecx, count
+sub ecx, 2
+
+fibloop:
+mov eax, fib1
+add eax, fib2
+call WriteDec
+call Crlf
+
+mov ebx, fib2
+mov fib1, ebx
+mov fib2, eax
+
+loop fibloop
+
+exit
+main endp
+end main
+
+TASK 02:
+Include Irvine32.inc
+
+.data
+
+.code
+main proc
+mov ecx, 4
+row1:
+mov eax, 1
+mov ebx, ecx
+col1:
+call WriteDec
+dec ebx
+jnz col1
+call Crlf
+loop row1
+
+mov ecx, 4
+row2:
+mov ebx, ecx
+col2:
+mov eax, ebx
+call WriteDec
+dec ebx
+jnz col2
+call Crlf
+loop row2
+
+mov ecx, 4
+row3:
+mov ebx, 1
+col3:
+mov eax, ebx
+call WriteDec
+inc ebx
+cmp ebx, ecx
+jle col3
+call Crlf
+loop row3
+
+exit
+main endp
+end main
+
+TASK 03:
+Include Irvine32.inc
+
+.data
+msgID     BYTE "Enter Employee ID of 5 Employees:",0dh,0ah,0
+msgBY     BYTE "Enter Birth Year of 5 Employees:",0dh,0ah,0
+msgSal    BYTE "Enter Annual Salary of 5 Employees:",0dh,0ah,0
+msgOutID  BYTE "Entered Employee IDs:",0dh,0ah,0
+msgOutBY  BYTE "Entered Birth Years:",0dh,0ah,0
+msgOutSal BYTE "Entered Annual Salaries:",0dh,0ah,0
+msgSum    BYTE "Sum of all Employee Salaries:",0dh,0ah,0
+
+
+EmployeeID WORD 5 DUP(?)
+BirthYear  WORD 5 DUP(?)
+Salary     WORD 5 DUP(?)
+sum        DWORD ?
+
+.code
+main proc
+
+mov edx, OFFSET msgID
+call WriteString
+mov ecx, 5
+mov esi, OFFSET EmployeeID
+
+inputID:
+call ReadInt
+mov [esi], ax
+add esi, TYPE EmployeeID
+loop inputID
+
+mov edx, OFFSET msgBY
+call WriteString
+mov ecx, 5
+mov esi, OFFSET BirthYear
+
+inputBY:
+call ReadInt
+mov [esi], ax
+add esi, TYPE BirthYear
+loop inputBY
+
+mov edx, OFFSET msgSal
+call WriteString
+mov ecx, 5
+mov esi, OFFSET Salary
+mov sum, 0
+
+inputSal:
+call ReadInt
+mov [esi], ax
+add esi, TYPE Salary
+add sum, eax
+loop inputSal
+
+mov edx, OFFSET msgOutID
+call WriteString
+mov ecx, 5
+mov esi, OFFSET EmployeeID
+
+outID:
+movzx eax, WORD PTR [esi]
+call WriteDec
+call Crlf
+add esi, TYPE EmployeeID
+loop outID
+
+mov edx, OFFSET msgOutBY
+call WriteString
+mov ecx, 5
+mov esi, OFFSET BirthYear
+
+outBY:
+movzx eax, WORD PTR [esi]
+call WriteDec
+call Crlf
+add esi, TYPE BirthYear
+loop outBY
+
+mov edx, OFFSET msgOutSal
+call WriteString
+mov ecx, 5
+mov esi, OFFSET Salary
+
+outSal:
+movzx eax, WORD PTR [esi]
+call WriteDec
+call Crlf
+add esi, TYPE Salary
+loop outSal
+
+mov edx, OFFSET msgSum
+call WriteString
+mov eax, sum
+call WriteDec
+call Crlf
+
+exit
+main endp
+end main
+
+TASK 04:
+Include Irvine32.inc
+
+.data
+Source BYTE "My name is Iqra", 0
+Target BYTE SIZEOF Source DUP(?)
+
+.code
+main proc
+mov esi, OFFSET Source
+mov edi, OFFSET Target
+
+Copy:
+mov al, [esi]
+mov [edi], al
+cmp al, 0
+je Done
+inc esi
+inc edi
+jmp Copy
+
+Done:
+mov edx, OFFSET Target
+call WriteString
+call Crlf
+
+exit
+main endp
+end main
+
+TASK 05:
+Include Irvine32.inc
+
+.data
+msg BYTE "Enter a non-negative integer: ", 0
+resultMsg BYTE "Factorial = ", 0
+
+.code
+main proc
+mov edx, OFFSET msg
+call WriteString
+call ReadInt
+mov ebx, eax
+
+compute_factorial:
+mov eax, 1
+cmp ebx, 1
+jle printresult
+
+mov ecx, 2
+factorial:
+cmp ecx, ebx
+jg factorialdone
+imul eax, ecx
+inc ecx
+jmp factorial
+
+factorialdone:
+jmp printresult
+
+printresult:
+mov edx, OFFSET resultMsg
+call WriteString
+call WriteInt 
+
+exit
+main endp
+end main
