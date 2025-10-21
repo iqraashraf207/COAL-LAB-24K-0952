@@ -1,0 +1,333 @@
+TASK 01:
+INCLUDE Irvine32.inc
+
+.data
+array1 DWORD 1,2,3,4,5,6,7,8,9,10
+array2 DWORD 10 DUP(?)
+msg1 BYTE "Original Array:",0
+msg2 BYTE "New Array:",0
+
+.code
+main PROC
+
+mov ecx, LENGTHOF array1
+mov esi, OFFSET array1
+
+pushloop:
+mov eax, [esi]
+push eax
+add esi, TYPE DWORD
+loop pushloop
+
+mov ecx, LENGTHOF array2
+mov edi, OFFSET array2
+
+poploop:
+pop eax
+mov [edi], eax
+add edi, TYPE DWORD
+loop poploop
+
+mov edx, OFFSET msg1
+call WriteString
+call Crlf
+
+mov ecx, LENGTHOF array1
+mov esi, OFFSET array1
+printarray1:
+mov eax, [esi]
+call WriteInt
+add esi, TYPE DWORD
+loop printarray1
+
+call Crlf
+mov edx, OFFSET msg2
+call WriteString
+call Crlf
+
+mov ecx, LENGTHOF array2
+mov esi, OFFSET array2
+printarray2:
+mov eax, [esi]
+call WriteInt
+add esi, TYPE DWORD
+loop printarray2
+
+call Crlf
+
+exit
+main ENDP
+END main
+
+TASK 02:
+INCLUDE Irvine32.inc
+
+.data
+result DWORD ?
+
+.code
+main PROC
+
+push 10
+push 20
+push 30
+
+pop eax
+pop ebx
+add eax, ebx
+
+pop ebx
+add eax, ebx
+
+mov result, eax
+mov eax, result
+call WriteInt
+call Crlf
+
+exit
+main ENDP
+END main
+
+TASK 03:
+INCLUDE Irvine32.inc
+
+.data
+array1 DWORD 2, 4, 6, 8, 10
+array2 DWORD 5, 7, 9, 11, 13
+len1 = LENGTHOF array1
+len2 = LENGTHOF array2
+msg1 BYTE "Sum of array 1: ", 0
+msg2 BYTE "Sum of array 2: ", 0
+msg3 BYTE "Total sum of array 1 and 2: ", 0
+sum1 DWORD ?
+sum2 DWORD ?
+total DWORD ?
+
+.code
+main PROC
+call calculateTotal
+exit
+main ENDP
+
+calculateTotal PROC
+call sumArray1
+call sumArray2
+
+mov eax, sum1
+add eax, sum2
+mov total, eax
+mov edx, OFFSET msg3
+call WriteString
+mov eax, total
+call WriteDec
+call Crlf
+ret
+calculateTotal ENDP
+
+sumArray1 PROC
+mov ecx, len1
+mov esi, OFFSET array1
+mov eax, 0
+
+sum1loop:
+add eax, [esi]
+add esi, TYPE array1
+loop sum1loop
+
+mov sum1, eax
+mov edx, OFFSET msg1
+call WriteString
+mov eax, sum1
+call WriteDec
+call Crlf
+ret
+sumArray1 ENDP
+
+sumArray2 PROC
+mov ecx, len2
+mov esi, OFFSET array2
+mov eax, 0
+
+sum2loop:
+add eax, [esi]
+add esi, TYPE array2
+loop sum2loop
+
+mov sum2, eax
+mov edx, OFFSET msg2
+call WriteString
+mov eax, sum2
+call WriteDec
+call Crlf
+ret
+sumArray2 ENDP
+
+END main
+
+TASK 04:
+INCLUDE Irvine32.inc
+
+.data
+msg1 BYTE "Enter a number:",0
+msg2 BYTE "The sum is:",0
+n DWORD ?
+sum DWORD ?
+
+.code
+main PROC
+
+mov edx, OFFSET msg1
+call WriteString
+call ReadInt
+mov n ,eax
+
+mov eax, n
+call sumton
+mov sum, eax
+mov edx, OFFSET msg2
+call WriteString
+mov eax, sum
+call WriteInt
+call Crlf
+
+exit
+main ENDP
+
+sumton PROC
+push ebx
+mov ebx, eax
+xor eax, ebx
+mov ecx, ebx
+
+sumloop:
+add eax, ecx
+loop sumloop
+
+pop ebx
+ret
+sumton ENDP
+
+END main
+
+TASK 05:
+INCLUDE Irvine32.inc
+
+.data
+msg1 BYTE "Enter a string:",0
+msg2 BYTE "Reversed String is:",0
+len DWORD ?
+input BYTE 50 DUP(?)
+reversed BYTE 50 DUP(?)
+
+.code
+main PROC
+
+mov edx, OFFSET msg1
+call WriteString
+mov edx, OFFSET input
+mov ecx, SIZEOF input
+call ReadString
+mov len, eax
+
+mov ecx, eax
+mov esi, OFFSET input
+
+pushloop:
+mov al, [esi] 
+push eax
+inc esi
+loop pushloop
+
+mov ecx, len
+mov edi, OFFSET reversed
+
+poploop:
+pop eax
+mov [edi], al
+inc edi
+loop poploop
+
+mov edx, OFFSET msg2
+call WriteString
+
+mov edx, OFFSET reversed
+call WriteString
+call Crlf
+
+exit
+main ENDP
+END main
+
+TASK 06:
+INCLUDE Irvine32.inc
+
+.data
+msg1 BYTE "Enter side 1: ", 0
+msg2 BYTE "Enter side 2: ", 0
+msg3 BYTE "Enter side 3: ", 0
+msgEq BYTE "The triangle is equilateral", 0
+msgIso BYTE "The triangle is isosceles", 0
+msgSca BYTE "The triangle is scalene", 0
+i DWORD ?
+j DWORD ?
+k DWORD ?
+
+.code
+main PROC
+mov edx, OFFSET msg1
+call WriteString
+call ReadInt
+mov i, eax
+
+mov edx, OFFSET msg2
+call WriteString
+call ReadInt
+mov j, eax
+
+mov edx, OFFSET msg3
+call WriteString
+call ReadInt
+mov k, eax
+
+call checkType
+
+exit
+main ENDP
+
+checkType PROC
+mov eax, i
+mov ebx, j
+mov ecx, k
+
+cmp eax, ebx
+jne notEquilateral
+cmp eax, ecx
+jne notEquilateral
+
+mov edx, OFFSET msgEq
+call WriteString
+call Crlf
+ret
+
+notEquilateral:
+cmp eax, ebx
+je isIsosceles
+cmp eax, ecx
+je isIsosceles
+cmp ebx, ecx
+je isIsosceles
+
+mov edx, OFFSET msgSca
+call WriteString
+call Crlf
+ret
+
+isIsosceles:
+mov edx, OFFSET msgIso
+call WriteString
+call Crlf
+ret
+
+checkType ENDP
+
+END main
