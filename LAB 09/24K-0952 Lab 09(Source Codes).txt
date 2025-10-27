@@ -1,0 +1,290 @@
+TASK 01:
+INCLUDE Irvine32.inc
+
+.data
+val DWORD 6
+result   DWORD ?
+
+.code
+main PROC
+mov     eax, val
+mov     ebx, eax
+shl     ebx, 4
+mov     ecx, eax
+shl     ecx, 2
+add     eax, ebx
+add     eax, ecx
+mov     result, eax
+
+mov     eax, result
+call    WriteDec
+call    Crlf
+
+exit
+main ENDP
+
+END main
+
+TASK 02:
+INCLUDE Irvine32.inc
+
+.data
+val    SWORD -128
+result DWORD ?
+
+.code
+main PROC
+mov     ax, val
+movzx   eax, ax
+
+shl     eax, 16
+sar     eax, 16
+
+mov     result, eax
+mov     eax, result
+call    WriteInt
+call    Crlf
+exit
+main ENDP
+
+END main
+
+TASK 03:
+INCLUDE Irvine32.inc
+
+.data
+wTime    WORD  0B6DCh
+bMinutes BYTE  ?
+
+.code
+main PROC
+mov     ax, wTime
+shr     ax, 5
+and     al, 3Fh
+mov     bMinutes, al
+
+movzx   eax, bMinutes
+call    WriteDec
+call    Crlf
+
+exit
+main ENDP
+
+END main
+
+TASK 04:
+INCLUDE Irvine32.inc
+
+.data
+axinput  WORD  0001h
+bxinput  WORD  0F0F0h
+result1 WORD ?
+result2 WORD ?
+msg1 BYTE "Result without using SHRD: ", 0
+msg2 BYTE "Result using SHRD:      ", 0
+
+.code
+main PROC
+mov ax, axinput
+mov bx, bxinput
+
+movzx eax, ax
+call WriteHex
+call Crlf
+movzx eax, bx
+call WriteHex
+call Crlf
+
+mov ax, axinput
+mov bx, bxinput
+
+shr ax, 1
+rcr bx, 1
+
+mov result1, bx
+
+mov edx, OFFSET msg1
+call WriteString
+movzx eax, result1
+call WriteHex
+call Crlf
+
+mov ax, axinput
+mov bx, bxinput
+
+shrd bx, ax, 1
+mov result2, bx
+
+mov edx, OFFSET msg2
+call WriteString
+movzx eax, result2
+call WriteHex
+call Crlf
+
+exit
+main ENDP
+
+END main
+
+TASK 05:
+INCLUDE Irvine32.inc
+
+.data
+val1    SDWORD  50
+val2    SDWORD  20
+val3    SDWORD  3
+result  SDWORD  ?
+
+.code
+main PROC
+mov     eax, val2 
+cdq     
+mov     ebx, val3
+idiv    ebx
+mov     esi, eax
+
+mov     eax, val1
+cdq
+mov     ebx, val2
+idiv    ebx
+mov     edi, eax
+
+mov     eax, esi
+imul    edi   
+mov     val1, eax
+mov     result, eax 
+
+mov     eax, result
+call    WriteInt
+call    Crlf
+
+exit
+main ENDP
+
+END main
+
+TASK 06:
+INCLUDE Irvine32.inc
+
+.data
+msg BYTE "Enter an integer: ", 0
+evenMsg BYTE "The number is even", 0
+oddMsg BYTE "The number is odd", 0
+num SDWORD ?
+
+.code
+main PROC
+mov     edx, OFFSET msg
+call    WriteString
+
+call    ReadInt 
+mov     num, eax
+
+test    eax, 1
+jz      isEven
+mov     edx, OFFSET oddMsg
+call    WriteString
+jmp     done
+
+isEven:
+mov     edx, OFFSET evenMsg
+call    WriteString
+
+done:
+call    Crlf
+exit
+main ENDP
+
+END main
+
+TASK 07:
+INCLUDE Irvine32.inc
+
+.data
+msg BYTE "Enter an integer: ", 0
+primeMsg BYTE "The number is prime", 0
+notPrimeMsg BYTE "The number is not prime", 0
+num SDWORD ?
+i SDWORD ?
+rem SDWORD ?
+
+.code
+main PROC
+mov     edx, OFFSET msg
+call    WriteString
+call    ReadInt
+mov     num, eax
+cmp     eax, 2
+jl      notPrime
+mov     i, 2
+
+checkLoop:
+mov     eax, num
+cdq  
+mov     ebx, i
+idiv    ebx  
+mov     rem, edx      
+cmp     rem, 0   
+je      notPrime
+inc     i        
+mov     eax, i
+imul    eax, eax   
+cmp     eax, num
+jle     checkLoop
+
+isPrime:
+mov     edx, OFFSET primeMsg
+call    WriteString
+jmp     done
+
+notPrime:
+mov     edx, OFFSET notPrimeMsg
+call    WriteString
+
+done:
+call    Crlf
+exit
+main ENDP
+
+END main
+
+TASK 08:
+INCLUDE Irvine32.inc
+
+.data
+msg BYTE "Enter an integer: ", 0
+squareMsg BYTE "Square: ", 0
+cubeMsg BYTE "Cube: ", 0
+num SDWORD ?
+square SDWORD ?
+cube SDWORD ?
+
+.code
+main PROC
+mov  edx, OFFSET msg
+call  WriteString
+call  ReadInt 
+mov num, eax
+
+mov     eax, num
+imul    eax, eax 
+mov     square, eax
+mov     eax, square
+imul    eax, num
+mov     cube, eax
+mov     edx, OFFSET squareMsg
+call    WriteString
+mov     eax, square
+call    WriteInt
+call    Crlf
+
+mov     edx, OFFSET cubeMsg
+call    WriteString
+mov     eax, cube
+call    WriteInt
+call    Crlf
+
+exit
+main ENDP
+
+END main
