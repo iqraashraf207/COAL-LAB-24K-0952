@@ -1,0 +1,266 @@
+TASK 01:
+INCLUDE Irvine32.inc
+
+.data
+msg BYTE "The product of three numbers is: ", 0
+
+.code
+main PROC
+push 2
+push 3
+push 4
+call ThreeProd
+exit
+main ENDP
+
+ThreeProd PROC
+push ebp
+mov  ebp, esp
+
+mov  eax, [ebp+8]    
+imul eax, [ebp+12]   
+imul eax, [ebp+16]  
+
+mov  edx, OFFSET msg
+call WriteString 
+call WriteInt      
+call Crlf 
+
+pop  ebp
+ret 12 
+ThreeProd ENDP
+
+END main
+
+TASK 02:
+INCLUDE Irvine32.inc
+
+.data
+prompt1 BYTE "Enter first number: ", 0
+prompt2 BYTE "Enter second number: ", 0
+msg BYTE "The GCD is: ", 0
+espMsg BYTE "ESP = ", 0
+
+.code
+main PROC
+call TakeInput
+exit
+main ENDP
+
+TakeInput PROC
+push ebp
+mov  ebp, esp
+
+mov  edx, OFFSET espMsg
+call WriteString
+mov  eax, esp
+call WriteHex
+call Crlf
+
+mov  edx, OFFSET prompt1
+call WriteString
+call ReadInt
+mov  ebx, eax
+
+mov  edx, OFFSET prompt2
+call WriteString
+call ReadInt
+mov  ecx, eax
+
+push ecx
+push ebx
+call GCD
+
+push eax
+call Display
+
+pop  ebp
+ret
+TakeInput ENDP
+
+GCD PROC
+push ebp
+mov  ebp, esp
+
+mov  eax, [ebp+8]
+mov  ebx, [ebp+12]
+
+L1:
+cmp  ebx, 0
+je   done
+mov  edx, 0
+div  ebx
+mov  eax, ebx
+mov  ebx, edx
+jmp  L1
+
+done:
+pop  ebp
+ret 8
+GCD ENDP
+
+Display PROC
+push ebp
+mov  ebp, esp
+
+mov  edx, OFFSET msg
+call WriteString
+mov  eax, [ebp+8]
+call WriteInt
+call Crlf
+
+pop  ebp
+ret 4
+Display ENDP
+
+END main
+
+TASK 03:
+INCLUDE Irvine32.inc
+
+.data
+array  SDWORD  15, 2, 45, 9, 33, 17, 8, 56, 10, 29, 72, 6, 39, 88, 1, 19, 7, 25, 50, 48
+msgMin BYTE "Minimum value = ", 0
+msgMax BYTE "Maximum value = ", 0
+
+.code
+main PROC
+lea  eax, array 
+push eax
+push 20 
+call MinMaxArray
+exit
+main ENDP
+
+MinMaxArray PROC
+push ebp
+mov  ebp, esp
+
+mov  ecx, [ebp+8]
+mov  esi, [ebp+12]
+
+mov  eax, [esi]
+mov  ebx, [esi]
+
+next_element:
+add  esi, 4
+dec  ecx
+jz   done 
+mov  edx, [esi] 
+cmp  edx, eax
+jl   new_min
+cmp  edx, ebx
+jg   new_max
+jmp  next_element
+
+new_min:
+mov  eax, edx
+jmp  next_element
+
+new_max:
+mov  ebx, edx
+jmp  next_element
+
+done:
+mov  edx, OFFSET msgMin
+call WriteString
+mov  eax, eax
+call WriteInt
+call Crlf
+
+mov  edx, OFFSET msgMax
+call WriteString
+mov  eax, ebx
+call WriteInt
+call Crlf
+
+pop  ebp
+ret 8
+MinMaxArray ENDP
+
+END main
+
+TASK 04:
+INCLUDE Irvine32.inc
+
+.data
+msg1 BYTE "Enter a number: ", 0
+msg2 BYTE "The square is: ", 0
+
+.code
+main PROC
+call LocalSquare
+exit
+main ENDP
+
+LocalSquare PROC
+enter 4, 0
+mov  edx, OFFSET msg1
+call WriteString
+call ReadInt
+
+mov  [ebp-4], eax
+
+mov  eax, [ebp-4]
+imul eax, [ebp-4]
+
+mov  edx, OFFSET msg2
+call WriteString
+call WriteInt
+call Crlf
+
+leave
+ret
+LocalSquare ENDP
+
+END main
+
+TASK 05:
+INCLUDE Irvine32.inc
+
+.data
+msg1 BYTE "Enter a number: ", 0
+msg2 BYTE "Factorial is: ", 0
+
+.code
+main PROC
+mov  edx, OFFSET msg1
+call WriteString
+call ReadInt
+push eax 
+call Fact
+mov  ebx, eax
+
+mov  edx, OFFSET msg2
+call WriteString
+mov  eax, ebx
+call WriteInt
+call Crlf
+
+exit
+main ENDP
+
+Fact PROC
+push ebp
+mov  ebp, esp
+
+mov  eax, [ebp+8]
+cmp  eax, 1
+jle  base_case
+
+dec  eax
+push eax
+call Fact 
+mov  ebx, [ebp+8]
+imul eax, ebx
+jmp  done
+
+base_case:
+mov  eax, 1
+
+done:
+pop  ebp
+ret 4
+Fact ENDP
+
+END main
