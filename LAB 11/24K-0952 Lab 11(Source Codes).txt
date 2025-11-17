@@ -1,0 +1,259 @@
+TASK 01:
+INCLUDE Irvine32.inc
+
+.data
+Str1 BYTE "127&j~3#^&*#*#45^", 0
+msg1 BYTE "Index of first # = ", 0
+
+.code
+Scan_String PROC
+push esi
+mov esi, edx
+mov ecx, 0
+
+searchloop:
+mov al, [esi]
+cmp al, 0  
+je  notfound
+
+cmp al, '#'
+je  found
+
+inc esi
+inc ecx
+jmp searchloop
+
+found:
+mov eax, ecx
+pop esi
+ret
+
+notfound:
+mov eax, -1 
+pop esi
+ret
+
+Scan_String ENDP
+
+main PROC
+mov edx, OFFSET Str1
+call Scan_String
+
+mov edx, OFFSET msg1
+call WriteString
+
+call WriteInt
+call Crlf
+
+exit
+main ENDP
+END main
+
+TASK 02:
+INCLUDE Irvine32.inc
+
+.data
+Str1 BYTE "127&j~3#^&*#*#45^", 0
+msg1 BYTE "Index = ", 0
+
+.code
+
+Scan_String PROC
+push ebp
+mov  ebp, esp
+push esi
+
+mov esi, [ebp+8]
+mov bl,  [ebp+12]
+mov ecx, 0
+
+L1:
+mov al, [esi]
+cmp al, 0
+je  L3
+
+cmp al, bl
+je  L2
+
+inc esi
+inc ecx
+jmp L1
+
+L2:
+mov eax, ecx
+pop esi
+pop ebp
+ret 8
+
+L3:
+mov eax, -1
+pop esi
+pop ebp
+ret 8
+
+Scan_String ENDP
+
+main PROC
+push BYTE PTR '#'
+push OFFSET Str1
+call Scan_String
+
+mov edx, OFFSET msg1
+call WriteString
+call WriteInt
+call Crlf
+
+exit
+main ENDP
+END main
+
+TASK 03:
+INCLUDE Irvine32.inc
+
+.data
+str1 BYTE "measure",0
+str2 BYTE "measure",0
+msg BYTE "Result = ",0 ; 1 if equal, 0 if not equal
+
+.code
+
+IsCompare PROC
+push ebp
+mov ebp,esp
+push esi
+push edi
+
+mov esi,[ebp+8]
+mov edi,[ebp+12]
+
+L1:
+mov al,[esi]
+mov bl,[edi]
+cmp al,bl
+jne notequal
+cmp al,0
+je equal
+inc esi
+inc edi
+jmp L1
+
+equal:
+mov eax,1
+jmp finish
+
+notequal:
+mov eax,0
+
+finish:
+pop edi
+pop esi
+pop ebp
+ret 8
+IsCompare ENDP
+
+main PROC
+push OFFSET str2
+push OFFSET str1
+call IsCompare
+
+mov edx,OFFSET msg
+call WriteString
+call WriteInt
+call Crlf
+
+exit
+main ENDP
+END main
+
+TASK 04:
+INCLUDE Irvine32.inc
+
+.data
+str1 BYTE "helloworld",0
+msg BYTE "Reversed = ",0
+
+.code
+
+Str_Reverse PROC
+push ebp
+mov ebp,esp
+push esi
+push edi
+
+mov esi,[ebp+8]
+mov edi,esi
+
+L1:
+mov al,[edi]
+cmp al,0
+je L2
+inc edi
+jmp L1
+
+L2:
+dec edi
+
+L3:
+cmp esi,edi
+jae L4
+mov al,[esi]
+mov bl,[edi]
+mov [esi],bl
+mov [edi],al
+inc esi
+dec edi
+jmp L3
+
+L4:
+pop edi
+pop esi
+pop ebp
+ret 4
+Str_Reverse ENDP
+
+main PROC
+push OFFSET str1
+call Str_Reverse
+
+mov edx,OFFSET msg
+call WriteString
+mov edx,OFFSET str1
+call WriteString
+call Crlf
+
+exit
+main ENDP
+END main
+
+TASK 05:
+INCLUDE Irvine32.inc
+
+.data
+arr DWORD  1,2,3,4,
+           5,6,7,8,
+           9,10,11,12
+
+.code
+main PROC
+mov esi,OFFSET arr
+mov ecx,3
+
+row_loop:
+mov ebx,4
+
+col_loop:
+mov eax,[esi]
+call WriteInt
+mov al,' '
+call WriteChar
+add esi,4
+dec ebx
+jnz col_loop
+
+call Crlf
+dec ecx
+jnz row_loop
+
+exit
+main ENDP
+END main
