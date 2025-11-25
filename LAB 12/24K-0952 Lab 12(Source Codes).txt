@@ -1,0 +1,81 @@
+TASK 01:
+#include <iostream>
+using namespace std;
+
+extern "C" int ThreeProd(int a, int b, int c);
+
+int main() {
+    int x, y, z;
+
+    cout << "Enter first number: ";
+    cin >> x;
+
+    cout << "Enter second number: ";
+    cin >> y;
+
+    cout << "Enter third number: ";
+    cin >> z;
+
+    int result = ThreeProd(x, y, z);
+
+    cout << "Product of the three numbers = " << result << endl;
+
+    return 0;
+}
+
+extern "C" int ThreeProd(int a, int b, int c) {
+    int result;
+
+    __asm {
+        mov eax, a
+        imul eax, b
+        imul eax, c
+        mov result, eax
+    }
+
+    return result;
+}
+
+TASK 02:
+#include <iostream>
+using namespace std;
+
+extern "C" int GCD(int a, int b);
+
+int main() {
+    int x, y;
+
+    cout << "Enter first number: ";
+    cin >> x;
+
+    cout << "Enter second number: ";
+    cin >> y;
+
+    int result = GCD(x, y);
+
+    cout << "GCD = " << result << endl;
+    return 0;
+}
+
+extern "C" int GCD(int a, int b) {
+    int result;
+
+    __asm {
+        mov eax, a
+        mov ebx, b
+
+        gcd_loop :
+        cmp ebx, 0
+            je done
+            mov edx, 0
+            div ebx
+            mov eax, ebx
+            mov ebx, edx
+            jmp gcd_loop
+
+            done :
+        mov result, eax
+    }
+
+    return result;
+}
